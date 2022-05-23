@@ -19,7 +19,7 @@ const TAG = 'app';
 
 export default {
   onCreate() {
-    HiLog.i(TAG, 'onCreate');
+    HiLog.i(TAG, 'onCreate version: 1.0.0.8');
     new AppStorageUtil();
   },
   onDestroy() {
