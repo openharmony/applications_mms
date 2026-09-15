@@ -149,23 +149,31 @@ export default class ConversationListModel extends BaseModel {
     return condition;
   }
 
+
+  private parseDbWholeTokenInt(value: string, defaultValue: number = 0): number {
+    if (/^\d+$/.test(value)) {
+      return Number.parseInt(value, 10);
+    }
+    return defaultValue;
+  }
+
   private buildSessionResult(resultSet): LooseObject {
     let result: LooseObject = {};
-    result.id = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.sessionField.id)));
-    result.time = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.sessionField.time)));
+    result.id = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.sessionField.id)));
+    result.time = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.sessionField.time)));
     result.telephone = resultSet.getString(resultSet.getColumnIndex(mmsTable.sessionField.telephone));
     result.content = resultSet.getString(resultSet.getColumnIndex(mmsTable.sessionField.content));
-    result.contactsNum = Number(resultSet.getString(
+    result.contactsNum = this.parseDbWholeTokenInt(resultSet.getString(
       resultSet.getColumnIndex(mmsTable.sessionField.contactsNum)));
-    result.smsType = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.sessionField.smsType)));
-    result.unreadCount = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.sessionField.unreadCount)));
-    result.sendStatus = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.sessionField.sendStatus)));
-    result.hasDraft = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.sessionField.hasDraft)));
-    result.hasLock = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.sessionField.hasLock)));
-    result.messageCount = Number(resultSet.getString(
+    result.smsType = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.sessionField.smsType)));
+    result.unreadCount = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.sessionField.unreadCount)));
+    result.sendStatus = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.sessionField.sendStatus)));
+    result.hasDraft = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.sessionField.hasDraft)));
+    result.hasLock = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.sessionField.hasLock)));
+    result.messageCount = this.parseDbWholeTokenInt(resultSet.getString(
       resultSet.getColumnIndex(mmsTable.sessionField.messageCount)));
-    result.hasMms = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.sessionField.hasMms)));
-    result.hasAttachment = Number(resultSet.getString(
+    result.hasMms = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.sessionField.hasMms)));
+    result.hasAttachment = this.parseDbWholeTokenInt(resultSet.getString(
       resultSet.getColumnIndex(mmsTable.sessionField.hasAttachment)));
     result.telephoneFormat = result.telephone;
     return result;

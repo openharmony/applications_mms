@@ -150,6 +150,14 @@ export default class ContactsModel extends BaseModel {
     ];
   }
 
+
+  private parseDbWholeTokenInt(value: string, defaultValue: number = 0): number {
+    if (/^\d+$/.test(value)) {
+      return Number.parseInt(value, 10);
+    }
+    return defaultValue;
+  }
+
   private buildContactDataResult(resultSet): LooseObject {
     let result: LooseObject = {};
     result.detailInfo = resultSet.getString(resultSet.getColumnIndex(mmsTable.contactDataColumns.detailInfo));
@@ -159,7 +167,7 @@ export default class ContactsModel extends BaseModel {
 
   private buildContactResult(resultSet): LooseObject {
     let result: LooseObject = {};
-    result.id = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.contactColumns.id)));
+    result.id = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.contactColumns.id)));
     return result;
   }
 
