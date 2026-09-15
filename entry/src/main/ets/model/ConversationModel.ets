@@ -122,7 +122,7 @@ export default class ConversationModel extends BaseModel {
       if (resultSet.rowCount > 0) {
         if (resultSet.goToLastRow()) {
           maxGroupId = (resultSet.getString(0) ==
-          common.string.EMPTY_STR) ? 0 : Number(resultSet.getString(0));
+          common.string.EMPTY_STR) ? 0 : this.parseDbWholeTokenInt(resultSet.getString(0));
           HiLog.i(TAG, 'queryMaxGroupId, maxGroupId: ' + maxGroupId);
         }
       }
@@ -152,9 +152,9 @@ export default class ConversationModel extends BaseModel {
       };
       if (resultSet.rowCount > 0) {
         if (resultSet.goToLastRow()) {
-          result.totalListCount = Number(resultSet.getString(0));
-          result.unreadCount = Number(resultSet.getString(1));
-          result.unreadTotalOfInfo = Number(resultSet.getString(2));
+          result.totalListCount = this.parseDbWholeTokenInt(resultSet.getString(0));
+          result.unreadCount = this.parseDbWholeTokenInt(resultSet.getString(1));
+          result.unreadTotalOfInfo = this.parseDbWholeTokenInt(resultSet.getString(2));
         }
       }
       callback(this.encapsulateReturnResult(common.int.SUCCESS, result));
@@ -233,34 +233,42 @@ export default class ConversationModel extends BaseModel {
     return resultColumns;
   }
 
+
+  private parseDbWholeTokenInt(value: string, defaultValue: number = 0): number {
+    if (/^\d+$/.test(value)) {
+      return Number.parseInt(value, 10);
+    }
+    return defaultValue;
+  }
+
   private buildSmsMmsInfoResult(resultSet): LooseObject {
     let result: LooseObject = {};
-    result.msgId = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.msgId)));
-    result.slotId = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.slotId)));
+    result.msgId = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.msgId)));
+    result.slotId = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.slotId)));
     result.receiverNumber = resultSet.getString(
       resultSet.getColumnIndex(mmsTable.messageInfo.receiverNumber));
     result.senderNumber = resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.senderNumber));
     result.startTime = resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.startTime));
     result.endTime = resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.endTime));
-    result.msgType = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.msgType)));
-    result.smsType = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.smsType)));
+    result.msgType = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.msgType)));
+    result.smsType = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.smsType)));
     result.msgTitle = resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.msgTitle));
     result.msgContent = resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.msgContent));
-    result.msgState = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.msgState)));
+    result.msgState = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.msgState)));
 
     result.operatorServiceNumber = resultSet.getString(
       resultSet.getColumnIndex(mmsTable.messageInfo.operatorServiceNumber));
-    result.msgCode = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.msgCode)));
-    result.isLock = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.isLock)));
-    result.isRead = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.isRead)));
-    result.isCollect = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.isCollect)));
-    result.sessionType = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.sessionType)));
-    result.retryNumber = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.retryNumber)));
-    result.isSubsection = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.isSubsection)));
-    result.sessionId = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.sessionId)));
-    result.groupId = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.groupId)));
-    result.isSender = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.isSender)));
-    result.isSendReport = Number(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.isSendReport)));
+    result.msgCode = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.msgCode)));
+    result.isLock = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.isLock)));
+    result.isRead = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.isRead)));
+    result.isCollect = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.isCollect)));
+    result.sessionType = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.sessionType)));
+    result.retryNumber = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.retryNumber)));
+    result.isSubsection = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.isSubsection)));
+    result.sessionId = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.sessionId)));
+    result.groupId = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.groupId)));
+    result.isSender = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.isSender)));
+    result.isSendReport = this.parseDbWholeTokenInt(resultSet.getString(resultSet.getColumnIndex(mmsTable.messageInfo.isSendReport)));
     return result;
   }
 }
